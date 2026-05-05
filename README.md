@@ -19,7 +19,7 @@ Your task is to implement said parts such that your implementation passes the te
 
 ## Getting started
 
-You should have cloned this repository to your local computer by now. For this project, we recommend you set up a Python 3.11 runtime either via your system package manager or via a dedicated container. Then, you can install the required packages marked in `requirements.txt`, preferably in a dedicated virtual environment (e.g., `venv` or `poetry`):
+You should have cloned this repository to your local computer by now. For this project, we strongly recommend you set up a Python 3.11 runtime either via your system package manager or via a dedicated container. Newer version of Python can and will cause problems (e.g., API changes in the `ast` package). Then, you can install the required packages marked in `requirements.txt`, preferably in a dedicated virtual environment (e.g., `venv` or `poetry`):
 
 ```bash
 $ pip3 install -r requirements.txt
