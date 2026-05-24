@@ -2,33 +2,36 @@
 Secret sharing scheme.
 MODIFY THIS FILE.
 """
-
 from __future__ import annotations
 
 from typing import List
 
+import random 
+
+
+PRIME=17    #ALL arithmetic happens modulo p .We choose a modulus prime p that is large.
 
 class Share:
     """
     A secret share in a finite field.
     """
 
-    def __init__(self, *args, **kwargs):
-        # Adapt constructor arguments as you wish
-        raise NotImplementedError("You need to implement this method.")
+    def __init__(self, value):
+        # Each party has one share of secret.
+        self.value = value % PRIME                           
 
     def __repr__(self):
-        # Helps with debugging.
-        raise NotImplementedError("You need to implement this method.")
+        # Helps with debugging. And its pretty printing for developers.
+        return f"Share({self.value})"  
 
     def __add__(self, other):
-        raise NotImplementedError("You need to implement this method.")
-
+        return Share((self.value + other.value) % PRIME)
+        
     def __sub__(self, other):
-        raise NotImplementedError("You need to implement this method.")
+        return Share((self.value - other.value) % PRIME)  
 
-    def __mul__(self, other):
-        raise NotImplementedError("You need to implement this method.")
+    def __mul__(self, other): 
+        return Share((self.value * other.value) % PRIME)
 
     def serialize(self):
         """Generate a representation suitable for passing in a message."""
@@ -37,17 +40,41 @@ class Share:
     @staticmethod
     def deserialize(serialized) -> Share:
         """Restore object from its serialized representation."""
-        raise NotImplementedError("You need to implement this method.")
+        
 
 
-def share_secret(secret: int, num_shares: int) -> List[Share]:
+def share_secret(secret: int, num_shares: int) -> List[Share]:   #create random share and final share balances equation.
     """Generate secret shares."""
-    raise NotImplementedError("You need to implement this method.")
+    shares = []
+    for i in range(num_shares-1):
+        random_value = random.randint(0, PRIME - 1)
+        shares.append(Share(random_value))    
+        print(random_value)                #create random share and append to list.
+
+    total = sum(share.value for share in shares) 
+    last_share = (secret - total) % PRIME    
+    print(last_share)                                    # last_share=s-r1-r2 mod p 
+
+    shares.append(Share(last_share))   #Append means adding the last share to the list of shares.
+    return shares 
 
 
 def reconstruct_secret(shares: List[Share]) -> int:
     """Reconstruct the secret from shares."""
-    raise NotImplementedError("You need to implement this method.")
+    total = sum(share.value for share in shares)   # s=r1+r2+r3 mod p 
+    return total % PRIME                            #return the secret.
+
+
+if __name__ == "__main__":
+    shares = share_secret(10,3)
+
+    print("Generated shares:")
+    print(shares)
+
+    reconstructed = reconstruct_secret(shares)
+
+    print("Reconstructed secret:")
+    print(reconstructed)
 
 
 # Feel free to add as many methods as you want.
