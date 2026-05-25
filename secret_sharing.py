@@ -9,7 +9,7 @@ from typing import List
 import random 
 
 
-PRIME=17    #ALL arithmetic happens modulo p .We choose a modulus prime p that is large.
+PRIME=101    #ALL arithmetic happens modulo p .We choose a modulus prime p that is large.
 
 class Share:
     """
@@ -54,7 +54,7 @@ def share_secret(secret: int, num_shares: int) -> List[Share]:   #create random 
     total = sum(share.value for share in shares) 
     last_share = (secret - total) % PRIME    
     print(last_share)                                    # last_share=s-r1-r2 mod p 
-
+    
     shares.append(Share(last_share))   #Append means adding the last share to the list of shares.
     return shares 
 
@@ -66,15 +66,21 @@ def reconstruct_secret(shares: List[Share]) -> int:
 
 
 if __name__ == "__main__":
-    shares = share_secret(10,3)
 
-    print("Generated shares:")
-    print(shares)
+    x_shares = share_secret(10, 3)
 
-    reconstructed = reconstruct_secret(shares)
+    print("Original shares:", x_shares)
 
-    print("Reconstructed secret:")
-    print(reconstructed)
+    k = 5
 
+    z_shares = x_shares.copy()
+
+    z_shares[0] = z_shares[0] + Share(k)
+
+    print("After adding constant:", z_shares)
+
+    result = reconstruct_secret(z_shares)
+
+    print("Final result:", result)
 
 # Feel free to add as many methods as you want.
