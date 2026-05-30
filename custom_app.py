@@ -135,22 +135,8 @@ def circuit2_total_with_bonus(student_names, grades, bonus_per_student):
     return total
 
 
-# ==============================================================
-# CIRCUIT 3 - Am I above or below the class average?
-#
-# We cannot divide in SMC so we use this trick:
-#   my_grade * N - total    (positive = above, negative = below)
-#
-# Negative numbers appear as huge numbers in finite field math.
-# We convert them back at the end.
-#
-# Example for Bob (grade=90, N=3, total=240):
-#   90 * 3 - 240 = 30 → above average!
-#
-# SMC operations used: addition of secrets,
-#                      multiply by Scalar, subtract secrets
-# ==============================================================
 
+# CIRCUIT 3 - Am I above or below the class average?
 def circuit3_above_or_below_average(student_names, grades, my_name):
     print(f"\n--- Circuit 3: Is {my_name} Above or Below Average? ---")
 
@@ -245,16 +231,13 @@ def circuit4_best_study_group(student_names, grades, groups):
             
         return best_group,group_scores
 
-# ==============================================================
-# MAIN - starts the server ONCE then runs all circuits
-# ==============================================================
 
+# MAIN - starts the server ONCE then runs all circuits
 if __name__ == "__main__":
 
-    print()
-    print("=" * 50)
+   
+
     print("  Private Exam Grade Checker using SMC")
-    print("=" * 50)
     print()
     print("Alice, Bob and Charlie got their exam results.")
     print("They want class stats but nobody shares their grade.")
@@ -274,20 +257,14 @@ if __name__ == "__main__":
     
     }
     bonus_per_student = 5
-
-    # ----------------------------------------------------------
-    # Start the server ONCE here and keep it running for all
-    # four circuits. This is much faster than restarting it
-    # every time because starting a server takes 3+ seconds.
-    # ----------------------------------------------------------
-    print("Starting server...")
+    
+    
+    print("Starting server...")      # Start the server 
     server = Process(target=smc_server, args=(student_names,))
     server.start()
     time.sleep(3)  # wait for server to be ready
     print("Server is running! Now running all circuits...\n")
-
-    # run all four circuits using the same server
-    total          = circuit1_total_sum(student_names, grades)
+    total          = circuit1_total_sum(student_names, grades)   # run all four circuits using the same server
     total_bonus    = circuit2_total_with_bonus(student_names, grades, bonus_per_student)
 
     gaps = {}
@@ -304,10 +281,10 @@ if __name__ == "__main__":
 
       
     avg = total / len(student_names)
-    print()
-    print("=" * 50)
+ 
+    
     print("  FINAL RESULTS")
-    print("=" * 50)
+    print("=" * 60)
     print(f"  Students         : {', '.join(student_names)}")
     print(f"  Total grades     : {total}")
     print(f"  Class average    : {avg:.1f}")
